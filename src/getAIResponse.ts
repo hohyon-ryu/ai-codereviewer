@@ -4,8 +4,8 @@ import OpenAI from "openai";
 const OPENAI_API_KEY: string = core.getInput("OPENAI_API_KEY");
 const OPENAI_API_MODEL: string = core.getInput("OPENAI_API_MODEL");
 const openai = new OpenAI({
-                            apiKey: OPENAI_API_KEY,
-                          });
+  apiKey: OPENAI_API_KEY,
+});
 
 export async function getAIResponse(prompt: string): Promise<Array<{
   lineNumber: string;
@@ -20,29 +20,25 @@ export async function getAIResponse(prompt: string): Promise<Array<{
     presence_penalty: 0,
   };
 
-  const response =
-    await openai.chat.completions.create(
+  const response = await openai.chat.completions.create({
+    ...queryConfig,
+    // return JSON if the model supports it:
+    ...(OPENAI_API_MODEL === "gpt-4-1106-preview"
+      ? { response_format: { type: "json_object" } }
+      : {}),
+    messages: [
       {
-        ...queryConfig,
-        // return JSON if the model supports it:
-        ...(OPENAI_API_MODEL === "gpt-4-1106-preview"
-          ? {response_format: {type: "json_object"}}
-          : {}),
-        messages: [
-          {
-            role: "system",
-            content: prompt,
-          },
-        ],
-      });
+        role: "system",
+        content: prompt,
+      },
+    ],
+  });
 
   const res = response.choices[0].message?.content?.trim() || "{}";
-  console.log("GPT response:")
+  console.log("GPT response:");
   console.log(res);
 
-  const cleanupResponse = res
-    .replace(/```json/g, "")
-    .replace(/```/g, "");
+  const cleanupResponse = res.replace(/```json/g, "").replace(/```/g, "");
 
   return JSON.parse(cleanupResponse).reviews;
 }

@@ -1,4 +1,4 @@
-import {octokit} from "./createReviewComment";
+import { octokit } from "./createReviewComment";
 
 export async function getDiff(
   owner: string,
@@ -6,11 +6,11 @@ export async function getDiff(
   pull_number: number
 ): Promise<string | null> {
   const response = await octokit.pulls.get({
-                                             owner,
-                                             repo,
-                                             pull_number,
-                                             mediaType: {format: "diff"},
-                                           });
+    owner,
+    repo,
+    pull_number,
+    mediaType: { format: "diff" },
+  });
   // @ts-expect-error - response.data is a string
   return response.data;
 }

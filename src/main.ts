@@ -1,11 +1,11 @@
-import {readFileSync} from "fs";
+import { readFileSync } from "fs";
 import * as core from "@actions/core";
 import parseDiff from "parse-diff";
 import minimatch from "minimatch";
-import {createReviewComment, octokit} from "./createReviewComment";
-import {analyzeCode} from "./analyzeCode";
-import {getPRDetails} from "./getPRDetails";
-import {getDiff} from "./getDiff";
+import { createReviewComment, octokit } from "./createReviewComment";
+import { analyzeCode } from "./analyzeCode";
+import { getPRDetails } from "./getPRDetails";
+import { getDiff } from "./getDiff";
 
 async function main() {
   const prDetails = await getPRDetails();
@@ -25,14 +25,14 @@ async function main() {
     const newHeadSha = eventData.after;
 
     const response = await octokit.repos.compareCommits({
-                                                          headers: {
-                                                            accept: "application/vnd.github.v3.diff",
-                                                          },
-                                                          owner: prDetails.owner,
-                                                          repo: prDetails.repo,
-                                                          base: newBaseSha,
-                                                          head: newHeadSha,
-                                                        });
+      headers: {
+        accept: "application/vnd.github.v3.diff",
+      },
+      owner: prDetails.owner,
+      repo: prDetails.repo,
+      base: newBaseSha,
+      head: newHeadSha,
+    });
 
     diff = String(response.data);
   } else {
@@ -54,7 +54,7 @@ async function main() {
 
   const filteredDiff = parsedDiff.filter((file) => {
     return !excludePatterns.some((pattern) =>
-                                   minimatch(file.to ?? "", pattern)
+      minimatch(file.to ?? "", pattern)
     );
   });
 

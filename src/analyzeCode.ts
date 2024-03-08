@@ -1,7 +1,7 @@
-import {File} from "parse-diff";
-import {createPrompt, PRDetails} from "./createPrompt";
-import {getAIResponse} from "./getAIResponse";
-import {createComment} from "./createComment";
+import { File } from "parse-diff";
+import { createPrompt, PRDetails } from "./createPrompt";
+import { getAIResponse } from "./getAIResponse";
+import { createComment } from "./createComment";
 
 export async function analyzeCode(
   parsedDiff: File[],

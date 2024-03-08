@@ -1,4 +1,4 @@
-import {Chunk, File} from "parse-diff";
+import { Chunk, File } from "parse-diff";
 import * as core from "@actions/core";
 
 export interface PRDetails {
@@ -9,9 +9,13 @@ export interface PRDetails {
   description: string;
 }
 
-const language: string = core.getInput("language") || 'English';
+const language: string = core.getInput("language") || "English";
 
-export function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
+export function createPrompt(
+  file: File,
+  chunk: Chunk,
+  prDetails: PRDetails
+): string {
   return `Your task is to review pull requests. Instructions:
 - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": "<review comment>"}]}
 - Do not give positive comments or compliments.
@@ -37,9 +41,9 @@ Git diff to review:
 \`\`\`diff
 ${chunk.content}
 ${chunk.changes
-    // @ts-expect-error - ln and ln2 exists where needed
-    .map((c) => `${c.ln ? c.ln : c.ln2} ${c.content}`)
-    .join("\n")}
+  // @ts-expect-error - ln and ln2 exists where needed
+  .map((c) => `${c.ln ? c.ln : c.ln2} ${c.content}`)
+  .join("\n")}
 \`\`\`
 `;
 }

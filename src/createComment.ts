@@ -1,4 +1,4 @@
-import {Chunk, File} from "parse-diff";
+import { Chunk, File } from "parse-diff";
 
 export function createComment(
   file: File,
